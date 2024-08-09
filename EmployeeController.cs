@@ -102,11 +102,11 @@ namespace dotnet_api_code_challenge
             return response;
         }
 
-        [Function("GetEmployeesHiredInLastYear")]
-        public async Task<HttpResponseData> GetEmployeesHiredInLastYear(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "employees/hired-last-year")] HttpRequestData req)
+        [Function("GetEmployeesHiredInLastNYears")]
+        public async Task<HttpResponseData> GetEmployeesHiredInLastNYears(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "employees/{numberOfYears}/hired")] HttpRequestData req, int numberOfYears = 1)
         {
-            var employees = await _sqlService.GetEmployeesHiredInLastYearAsync();
+            var employees = await _sqlService.GetEmployeesHiredInLastNYears(numberOfYears);
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteAsJsonAsync(employees);

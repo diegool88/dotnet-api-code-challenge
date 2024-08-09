@@ -12,9 +12,11 @@ public class EmployeeCustomService
         _context = context;
     }
 
-    public async Task<IEnumerable<Employee>> GetEmployeesHiredInLastYearAsync()
+    public async Task<IEnumerable<Employee>> GetEmployeesHiredInLastNYears(int numberOfYears)
     {
-        var query = "SELECT * FROM Employees WHERE DateOfHire >= @p0 ORDER BY DateOfHire DESC";
-        return await _context.Employees.FromSqlRaw(query, DateTime.UtcNow.AddYears(-1)).ToListAsync();
+        return await _context.Employees
+        .Where(e => e.DateOfHire >= DateTime.UtcNow.AddYears(-1 * numberOfYears))
+        .OrderByDescending(e => e.DateOfHire)
+        .ToListAsync();
     }
 }
