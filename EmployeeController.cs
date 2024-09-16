@@ -112,5 +112,39 @@ namespace dotnet_api_code_challenge
             await response.WriteAsJsonAsync(employees);
             return response;
         }
+
+        [Function("GetEmployeesByAgeRange")]
+        public async Task<HttpResponseData> GetEmployeesByAgeRange(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "employees/{range}/age")] HttpRequestData req, string range = "20|30")
+        {
+            var ageRange = range.Split("|").ToArray().Select(x => int.Parse(x)).ToList();
+            var employees = await _sqlService.GetEmployeesByAgeRange(ageRange.FirstOrDefault(), ageRange.Last());
+
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync(employees);
+            return response;
+        }
+
+        [Function("GetEmployeesByBirthdayMonth")]
+        public async Task<HttpResponseData> GetEmployeesByBirthdayMonth(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "employees/{month}/birthday")] HttpRequestData req, int month = 1) // Defaults to January
+        {
+            var employees = await _sqlService.GetEmployeesByBirthdayMonth(month);
+
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync(employees);
+            return response;
+        }
+
+        [Function("GetEmployeesWhoReportsTo")]
+        public async Task<HttpResponseData> GetEmployeesWhoReportsTo(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "employees/{employeeId}/reportsTo")] HttpRequestData req, int employeeId)
+        {
+            var employees = await _sqlService.GetEmployeesWhoReportsTo(employeeId);
+
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            await response.WriteAsJsonAsync(employees);
+            return response;
+        }
     }
 }

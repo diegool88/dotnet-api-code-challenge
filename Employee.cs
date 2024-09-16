@@ -9,4 +9,6 @@ public class Employee
     public string Position { get; set; }
     public decimal Salary { get; set; }
     public DateTime DateOfHire { get; set; }
+    public DateTime BirthDate { get; set; }
+    public int? ReportsTo { get; set; }
 }
